@@ -1,0 +1,59 @@
+---
+//components 
+import Navbar from "../components/navbar.astro";
+import HeroAnimation from "../components/hero_animation.astro"
+
+---
+<style>
+  .hero {
+    height: 70vh; 
+    display: flex;
+    gap: 300px;
+    align-items: center; /* Center text vertically */
+    padding-left: 13%; 
+    background-color: #E6E6E6; 
+  }
+
+  .hero-content {
+    max-width: 600px;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 3vw, 3rem); /* Responsive scaling */
+    margin: 0;
+    font-family: 'Karla', sans-serif;
+    font-weight: normal;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1rem); /* Adjust subtitle size */
+    color: #555;
+    margin-top: 20px;
+    font-family: 'Inconsolata', monospace; 
+  }
+
+  /* Reduce space between the two subtitles */
+  .hero-subtitle:first-of-type {
+    margin-bottom: 10px; /* Adjust this value to control space */
+  }
+
+
+  /* 📱 Mobile Adjustments */
+  @media (max-width: 768px) {
+    .hero {
+      padding-left: 5%; 
+    }
+  }
+</style>
+
+
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">Hi, I'm Kevin Namkung</h1>
+    <p class="hero-subtitle">Currently a SWE at Capital One.</p>
+    <p class="hero-subtitle">Recent UVA Graduate - Previously at General Atomics.</p>
+  </div>
+  <div class ="hero-image">
+    <HeroAnimation />
+  </div>
+</section>

@@ -1,0 +1,181 @@
+---
+const items = [
+  {
+    title: "Experience",
+    content: [
+      {
+        name: "Software Engineer - Capital One",
+        description: "Worked on real-time data systems.",
+        url: "https://capitalone.com"
+      },
+      {
+        name: "Software Engineer Intern - Capital One",
+        description: "E2E Testing Suite",
+        url: "https://capitalone.com"
+      },
+      {
+        name: "Software Engineer Intern - General Atomics",
+        description: "Developed software for aviation projects.",
+        url: "https://ga.com"
+      }
+    ],
+  },
+  {
+    title: "Projects",
+    content: [
+    {
+        name: "Software Engineer - Capital One",
+        description: "Worked on real-time data systems.",
+        url: "https://capitalone.com"
+      },
+      {
+        name: "Software Engineer Intern - Capital One",
+        description: "E2E Testing Suite",
+        url: "https://capitalone.com"
+      },
+      {
+        name: "Software Engineer Intern - General Atomics",
+        description: "Developed software for aviation projects.",
+        url: "https://ga.com"
+      }
+    ],
+  },
+];
+
+let activeIndex = 0; // Default active index
+---
+
+<style>
+  /* .content {
+    display: flex;
+  } */
+
+  .dropdown {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #E6E6E6;
+    transition: background 0.2s;
+    font-family: 'Karla', sans-serif;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .dropdown-item:hover {
+    background-color: #e0e0e0;
+  }
+
+  .dropdown-content {
+    display: none;
+    padding: 5px;
+    background: #E6E6E6;
+    margin-top: 10px; /* Default margin between dropdown item and content */
+    transition: margin-top 0.2s; /* Smooth transition for margin change */
+  }
+
+  .dropdown-content.active {
+    display: block;
+    margin-top: 0; /* Less space between dropdown item and content when active */
+  }
+
+  .dropdown-content ul {
+    list-style: none;
+    padding-left: 1;
+    margin: 0;
+  }
+
+   /* Style each item with padding, border, and background */
+   .dropdown-content li {
+    margin-bottom: 10px;
+    background-color: #E6E6E6;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .dropdown-content li:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* Add link styles */
+  .dropdown-content a {
+    text-decoration: none;
+    color: #343434;
+    font-size: clamp(1rem, 3vw, 1rem); /* Adjust subtitle size */
+  }
+
+  .dropdown-content a:hover {
+    text-decoration: underline;
+  }
+
+  .flashcard {
+    width: 250px;
+    height: 200px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .flashcard a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+</style>
+
+<section class = "content">
+  {items.map((item, index) => (
+    <div class="dropdown">
+      <div class="dropdown-item" id={`dropdown-toggle-${index}`}>
+        {item.title}
+      </div>
+      <div class="dropdown-content" id={`dropdown-${index}`}>
+        <ul>
+          {item.content.map((entry) => (
+            <li>
+              <a href={entry.url} target="_blank">{entry.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div id={`flashcard-${index}`} class="flashcard" style="display: none;">
+      <h4>{item.content[0]?.name}</h4>
+      <p>{item.content[0]?.description}</p>
+      <a href={item.content[0]?.url} target="_blank">View More</a>
+    </div>
+  ))}
+</section>
+
+<script>
+  // Wait for the page to load before adding event listeners
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach((item, index) => {
+      item.addEventListener('click', function() {
+        const content = document.getElementById(`dropdown-${index}`);
+        const flashcard = document.getElementById(`flashcard-${index}`);
+
+        // Toggle the dropdown content display
+        if(content) {
+          content.classList.toggle('active');
+        }
+
+        // Show or hide the flashcard
+        if (flashcard) {
+          flashcard.style.display = flashcard.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,38 @@
+---
+import lottie from "lottie-web";
+---
+
+<section class="lottie-container">
+  <div id="lottie-animation"></div>
+</section>
+
+<script>
+  import lottie from "lottie-web";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("lottie-animation");
+
+    if (container) {
+      lottie.loadAnimation({
+        container,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "/lottie/heroanimation.json",
+      });
+    } else {
+      console.error("Lottie container not found!");
+    }
+  });
+</script>
+
+
+<style>
+  .lottie-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    width: 100%;
+  }
+</style>
