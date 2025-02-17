@@ -5,56 +5,52 @@ const items = [
     content: [
       {
         name: "Software Engineer - Capital One",
-        description: "Worked on real-time data systems.",
-        url: "https://capitalone.com"
-      },
-      {
-        name: "Software Engineer Intern - Capital One",
-        description: "E2E Testing Suite",
-        url: "https://capitalone.com"
+        url: "https://capitalone.com",
+        image: "/images/cap1swe.png"
       },
       {
         name: "Software Engineer Intern - General Atomics",
-        description: "Developed software for aviation projects.",
-        url: "https://ga.com"
+        url: "https://ga.com",
+        image: "/images/cap1intern.png"
       }
     ],
   },
   {
     title: "Projects",
     content: [
-    {
-        name: "Software Engineer - Capital One",
-        description: "Worked on real-time data systems.",
-        url: "https://capitalone.com"
+      {
+        name: "Personal Website",
+        url: "https://example.com",
+        image: "/images/cap1swe.png"
       },
       {
-        name: "Software Engineer Intern - Capital One",
-        description: "E2E Testing Suite",
-        url: "https://capitalone.com"
-      },
-      {
-        name: "Software Engineer Intern - General Atomics",
-        description: "Developed software for aviation projects.",
-        url: "https://ga.com"
+        name: "Discord Bot - Viola",
+        url: "https://github.com",
+        image: "/images/cap1swe.png"
       }
     ],
   },
 ];
 
-let activeIndex = 0; // Default active index
+const defaultImage = items[0].content[0].image;
 ---
 
 <style>
-  /* .content {
+  
+  .container {
     display: flex;
-  } */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+    max-width: 800px;
+    margin-left: 20vw;
+    margin-top: 100px;
+  }
 
   .dropdown {
     width: 100%;
-    max-width: 450px;
-    margin: 0 auto;
-    display: block;
+    max-width: 400px;
+    margin-right: -20px;
   }
 
   .dropdown-item {
@@ -98,6 +94,10 @@ let activeIndex = 0; // Default active index
     transition: background 0.3s;
   }
 
+  .dropdown-content li.active-item {
+    background-color: #e0e0e0; 
+  }
+
   .dropdown-content li:hover {
     background-color: #e0e0e0;
   }
@@ -113,68 +113,93 @@ let activeIndex = 0; // Default active index
     text-decoration: underline;
   }
 
-  .flashcard {
-    width: 250px;
-    height: 200px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .image-container {
+    max-width: 500px;
+    max-height: 500px;
   }
 
-  .flashcard a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
+  .image-container img {
+    width: 170%;
+    height: auto;
+    border-radius: 0px;
   }
+
 </style>
 
-<section class = "content">
-  {items.map((item, index) => (
-    <div class="dropdown">
-      <div class="dropdown-item" id={`dropdown-toggle-${index}`}>
-        {item.title}
+<section class="container">
+  <!-- Dropdown Section -->
+  <div class="dropdown">
+    {items.map((item, index) => (
+      <div>
+        <div class="dropdown-item" id={`dropdown-toggle-${index}`}>
+          {item.title}
+        </div>
+        <div class="dropdown-content" id={`dropdown-${index}`}>
+          <ul>
+            {item.content.map((entry, idx) => (
+              <li>
+                <a href={entry.url} target="_blank" data-image={entry.image}>{entry.name}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div class="dropdown-content" id={`dropdown-${index}`}>
-        <ul>
-          {item.content.map((entry) => (
-            <li>
-              <a href={entry.url} target="_blank">{entry.name}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-    <div id={`flashcard-${index}`} class="flashcard" style="display: none;">
-      <h4>{item.content[0]?.name}</h4>
-      <p>{item.content[0]?.description}</p>
-      <a href={item.content[0]?.url} target="_blank">View More</a>
-    </div>
-  ))}
+    ))}
+  </div>
+
+  <!-- Image Display -->
+  <div class="image-container">
+    <img id="display-image" src={defaultImage} alt="Experience Image">
+  </div>
 </section>
 
 <script>
-  // Wait for the page to load before adding event listeners
   document.addEventListener('DOMContentLoaded', function () {
     const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const imageContainer = document.getElementById('display-image');
+    const dropdownLinks = document.querySelectorAll('.dropdown-content a');
 
+    // Set the default active image
+    const defaultActiveItem = document.querySelector('.dropdown-content a[data-image]');
+    if (defaultActiveItem) {
+      defaultActiveItem.parentElement.classList.add('active-item'); // Highlight first item
+    }
+
+    // Ensure the first dropdown (Experience) is expanded
+    const firstDropdown = document.getElementById('dropdown-0');
+    if (firstDropdown) {
+      firstDropdown.classList.add('active');
+    }
+
+    // dropdown
     dropdownItems.forEach((item, index) => {
       item.addEventListener('click', function() {
         const content = document.getElementById(`dropdown-${index}`);
-        const flashcard = document.getElementById(`flashcard-${index}`);
-
-        // Toggle the dropdown content display
-        if(content) {
+        if (content) {
           content.classList.toggle('active');
         }
+      });
+    });
 
-        // Show or hide the flashcard
-        if (flashcard) {
-          flashcard.style.display = flashcard.style.display === 'none' ? 'block' : 'none';
+    // Handle image and highlight the corresponding dropdown item
+    dropdownLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default link behavior
+
+        // Update image
+        const target = event.currentTarget;
+        const imageSrc = target.getAttribute('data-image');
+        if (imageContainer) {
+          imageContainer.src = imageSrc;
         }
+
+        // Remove active-item class from all list items
+        document.querySelectorAll('.dropdown-content li').forEach((li) => {
+          li.classList.remove('active-item');
+        });
+
+        // Highlight the clicked item
+        target.parentElement.classList.add('active-item');
       });
     });
   });
