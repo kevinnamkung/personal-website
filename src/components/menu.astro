@@ -4,14 +4,19 @@ const items = [
     title: "Experience",
     content: [
       {
-        name: "Software Engineer - Capital One",
-        url: "https://capitalone.com",
+        name: "SWE - Capital One",
+        url: "/about",
         image: "/images/cap1swe.png"
       },
       {
-        name: "Software Engineer Intern - General Atomics",
-        url: "https://ga.com",
+        name: "SWE Intern - Capital One",
+        url: "/about",
         image: "/images/cap1intern.png"
+      },
+      {
+        name: "SWE Intern - General Atomics",
+        url: "https://ga.com",
+        image: "/images/gaintern.png"
       }
     ],
   },
@@ -19,15 +24,20 @@ const items = [
     title: "Projects",
     content: [
       {
-        name: "Personal Website",
+        name: "Spotify Top Hits Predictor",
         url: "https://example.com",
-        image: "/images/cap1swe.png"
+        image: "/images/spotifypredict.png"
       },
+    ],
+  },
+  {
+    title: "Certifications",
+    content: [
       {
-        name: "Discord Bot - Viola",
-        url: "https://github.com",
-        image: "/images/cap1swe.png"
-      }
+        name: "AWS Solutions Architect",
+        url: "https://example.com",
+        image: "/images/awsSA.png"
+      },
     ],
   },
 ];
@@ -41,14 +51,14 @@ const defaultImage = items[0].content[0].image;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 60px;
-    max-width: 800px;
+    gap: 100px;
+    max-width: 1200px;
     margin-left: 20vw;
-    margin-top: 100px;
+    margin-top: 50px;
   }
 
   .dropdown {
-    width: 100%;
+    width: 250%;
     max-width: 400px;
     margin-right: -20px;
   }
@@ -69,15 +79,20 @@ const defaultImage = items[0].content[0].image;
 
   .dropdown-content {
     display: none;
-    padding: 5px;
+    padding: 10px;
     background: #E6E6E6;
     margin-top: 10px; /* Default margin between dropdown item and content */
-    transition: margin-top 0.2s; /* Smooth transition for margin change */
+    transition: margin-top 0.2s, opacity 0.3s; 
+    opacity: 0; /* Initially hidden */
+    max-height: 0; /* Start with 0 height */
+    overflow: hidden; /* Ensure it doesn't overflow when collapsed */
   }
 
   .dropdown-content.active {
     display: block;
-    margin-top: 0; /* Less space between dropdown item and content when active */
+    margin-top: 0; 
+    opacity: 1;
+    max-height: 300px; /* Adjust this value to suit your content size */
   }
 
   .dropdown-content ul {
@@ -106,7 +121,7 @@ const defaultImage = items[0].content[0].image;
   .dropdown-content a {
     text-decoration: none;
     color: #343434;
-    font-size: clamp(1rem, 3vw, 1rem); /* Adjust subtitle size */
+    font-size: clamp(1rem, 2vw, 1rem); /* Adjust subtitle size */
   }
 
   .dropdown-content a:hover {
@@ -114,14 +129,35 @@ const defaultImage = items[0].content[0].image;
   }
 
   .image-container {
-    max-width: 500px;
-    max-height: 500px;
+    flex-shrink: 0;
+    max-width: 600px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; /* Indicates it's clickable */
+    width: 400%;
+  }
+
+  .image-container:hover {
+    background-color: #dcdcdc;
+    transform: scale(1.05); /* Slightly enlarges the image */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); /* Adds a shadow for depth */
   }
 
   .image-container img {
-    width: 170%;
+    width: 200%;
     height: auto;
     border-radius: 0px;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    opacity: 1;
+  }
+
+  .image-container img.fade-out {
+    opacity: 0;
+    transform: scale(0.95); /* Slight shrink effect when changing */
   }
 
 </style>
@@ -149,7 +185,9 @@ const defaultImage = items[0].content[0].image;
 
   <!-- Image Display -->
   <div class="image-container">
-    <img id="display-image" src={defaultImage} alt="Experience Image">
+    <a id="image-link" href="#" target="_blank"></a>
+      <img id="display-image" src={defaultImage} alt="Experience Image">
+    </a>
   </div>
 </section>
 
@@ -163,6 +201,8 @@ const defaultImage = items[0].content[0].image;
     const defaultActiveItem = document.querySelector('.dropdown-content a[data-image]');
     if (defaultActiveItem) {
       defaultActiveItem.parentElement.classList.add('active-item'); // Highlight first item
+      imageContainer.src = defaultActiveItem.getAttribute('data-image');
+      imageContainer.setAttribute('data-url', defaultActiveItem.href); // Store URL in the image
     }
 
     // Ensure the first dropdown (Experience) is expanded
@@ -170,15 +210,31 @@ const defaultImage = items[0].content[0].image;
     if (firstDropdown) {
       firstDropdown.classList.add('active');
     }
-
+    
     // dropdown
     dropdownItems.forEach((item, index) => {
       item.addEventListener('click', function() {
         const content = document.getElementById(`dropdown-${index}`);
+
+        // Close any other open dropdowns
+        document.querySelectorAll('.dropdown-content').forEach((item, i) => {
+          if (item !== content) {
+            item.classList.remove('active');
+          }
+        });
+
         if (content) {
           content.classList.toggle('active');
         }
       });
+    });
+
+    // Make the image clickable
+    imageContainer.addEventListener('click', function () {
+      const linkUrl = imageContainer.getAttribute('data-url');
+      if (linkUrl) {
+        window.location.href = linkUrl;
+      }
     });
 
     // Handle image and highlight the corresponding dropdown item
@@ -189,8 +245,17 @@ const defaultImage = items[0].content[0].image;
         // Update image
         const target = event.currentTarget;
         const imageSrc = target.getAttribute('data-image');
-        if (imageContainer) {
-          imageContainer.src = imageSrc;
+
+        if (imageContainer && imageSrc) {
+          // Add fade-out effect
+          imageContainer.classList.add("fade-out");
+
+          setTimeout(() => {
+            imageContainer.src = imageSrc;
+            imageContainer.setAttribute("data-url", target.href);
+            imageContainer.classList.remove("fade-out"); // Remove fade-out after change
+          }, 300); // Match CSS transition duration
+
         }
 
         // Remove active-item class from all list items

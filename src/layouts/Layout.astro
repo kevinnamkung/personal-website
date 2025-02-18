@@ -1,7 +1,7 @@
 ---
 //components 
 import Navbar from "../components/navbar.astro";
-
+import Footer from "../components/footer.astro";
 ---
 
 <!DOCTYPE html>
@@ -10,12 +10,13 @@ import Navbar from "../components/navbar.astro";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kevinnamkung</title>
-	<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400&display=swap" rel="stylesheet">
   </head>
   <body>
     <Navbar />
 		<slot />
+    <Footer />
   </body>
 
   <style>
@@ -23,7 +24,7 @@ import Navbar from "../components/navbar.astro";
       background-color: #E6E6E6; /* Light gray background */
       color: #343434; /* Dark text for contrast */
       font-family: 'Inconsolata', monospace; 
-	  font-size: clamp(1rem, 1.25vw, 3rem); /* Adjust subtitle size */
+	    font-size: clamp(1rem, 1.25vw, 3rem); /* Adjust subtitle size */
       margin: 0;
       padding: 0;
     }
